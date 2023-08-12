@@ -1,9 +1,13 @@
+<!-- views/index.ejs -->
 <!DOCTYPE html>
 <html>
 <head>
   <title>TriviAI</title>
 </head>
+<script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+<script src="/index.js"></script>
 <body>
-  <button onclick="<%=getQuestion()%>">Test</button>
+  <button id="test-button">Test</button>
+  <div id="question-container"></div>
 </body>
 </html>

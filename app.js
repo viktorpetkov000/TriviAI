@@ -1,3 +1,4 @@
+// app.js
 const express = require("express");
 const app = express();
 const https = require('https');
@@ -11,14 +12,22 @@ let options = {
 };
 
 app.set('view engine', 'ejs');
+app.use(express.static(__dirname + '/js'));
 
 app.listen(3000, () => {
   console.log("Server running on port 3000");
 });
 
 app.get("/", (req, res) => {
-  res.locals.getQuestion = getQuestion;
   res.render('index');
+});
+
+// Add a new route to handle the fetch request from the client
+app.get("/getQuestion", (req, res) => {
+  // Call the getQuestion function and send the result as JSON
+  getQuestion().then((question) => {
+    res.json(question);
+  });
 });
 
 function getCategories() {
@@ -33,10 +42,15 @@ function getCategories() {
 
 function getQuestion() {
   options.path = '/api.php?amount=1&type=multiple'
-  const request = https.request(options, (response) => {
-    response.on('data', (data) => {
-      console.log(JSON.parse(data.toString()));
+  // Return a promise that resolves with the question object
+  return new Promise((resolve, reject) => {
+    const request = https.request(options, (response) => {
+      response.on('data', (data) => {
+        let question = JSON.parse(data.toString());
+        console.log(question);
+        resolve(question);
+      });
     });
+    request.end();
   });
-  request.end();
 }
